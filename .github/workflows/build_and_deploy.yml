@@ -1,4 +1,4 @@
-name: Build and Deploy odoo Application in Docker-server
+name: Build and Deploy Odoo Application in Docker-server
 
 on:
   push:
@@ -21,15 +21,15 @@ jobs:
 
       - name: Extract Git SHA
         id: vars
-        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        run: echo "SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/custom_odoo_image:${{ env.sha_short }} .
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/custom_odoo_image:${{ env.SHA_SHORT }} .
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/custom_odoo_image:${{ env.sha_short }}
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/custom_odoo_image:${{ env.SHA_SHORT }}
 
   deploy-server:
     needs: build
@@ -41,7 +41,15 @@ jobs:
 
       - name: Update docker-compose.yml with new image tag
         run: |
-          sed -i 's|image: abhisharma1423/custom_odoo_image:.*|image: ${{ secrets.DOCKER_HUB_USERNAME }}/custom_odoo_image:${{ env.sha_short }}|' docker-compose.yml
+          sed -i "s|image: abhisharma1423/custom_odoo_image:.*|image: ${{ secrets.DOCKER_HUB_USERNAME }}/custom_odoo_image:${{ env.SHA_SHORT }}|" docker-compose.yml
+
+      - name: Commit and Push updated docker-compose.yml
+        run: |
+          git config --global user.email "abhinandan.av18@gmail.com"
+          git config --global user.name "Abhinandan Vishwakarma"
+          git add docker-compose.yml
+          git commit -m "Update Odoo image tag to ${{ env.SHA_SHORT }}"
+          git push origin main
 
       - name: Set up SSH key
         run: |
@@ -55,7 +63,6 @@ jobs:
           ssh -i ~/.ssh/deploy_key.pem ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} << 'EOF'
           cd /home/ubuntu/Linux-Genius-odoo_app_CI-CD- || exit 1
           git pull origin main
-          cd Linux-Genius-odoo_app_CI-CD-/
+          docker compose down
           docker compose up -d
           EOF
-        
