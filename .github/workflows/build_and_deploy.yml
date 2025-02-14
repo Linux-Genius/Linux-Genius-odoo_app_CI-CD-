@@ -57,7 +57,7 @@ jobs:
           docker compose up -d
           EOF
             ssh -i ~/.ssh/deploy_key.pem ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} << 'EOF'
-            cd odoo_app_CI-CD- || { echo "Directory not found!"; exit 1; }
+            cd Linux-Genius-odoo_app_CI-CD-/
             git pull origin main
             cd Linux-Genius-odoo_app_CI-CD-/
             docker compose up -d
