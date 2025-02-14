@@ -45,7 +45,7 @@ jobs:
 
       - name: Update docker-compose.yml with new image tag
         run: |
-          sed -i "s|image: abhisharma1423/custom_odoo_image:.*|image: ${{ secrets.DOCKER_HUB_USERNAME }}/custom_odoo_image:${{ env.SHA_SHORT }}|" docker-compose.yml
+          sed -i "s|image: abhisharma1423/custom_odoo_image:.*|image: abhisharma1423/custom_odoo_image:${{ env.SHA_SHORT }}|" docker-compose.yml
 
       - name: Commit and Push updated docker-compose.yml
         env:
