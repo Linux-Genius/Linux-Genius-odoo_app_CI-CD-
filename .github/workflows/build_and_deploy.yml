@@ -55,6 +55,6 @@ jobs:
           ssh -i ~/.ssh/deploy_key.pem ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} << 'EOF'
           git pull origin main
           cd odoo_app_CI-CD-/
-          docker-compose down
-          docker-compose up -d
+          docker compose down
+          docker compose up -d
           EOF
