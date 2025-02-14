@@ -1,4 +1,4 @@
-name: Build and Deploy Odoo App
+name: Build and Deploy odoo Application in Docker-server
 
 on:
   push:
