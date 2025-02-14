@@ -31,7 +31,7 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/custom_odoo_image:${{ env.sha_short }}
 
-  deploy:
+  deploy-server:
     needs: build
     runs-on: ubuntu-latest
 
