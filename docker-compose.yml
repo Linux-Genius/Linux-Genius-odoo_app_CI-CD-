@@ -10,7 +10,7 @@ services:
     restart: unless-stopped	 
   
   odoo:
-    image: abhisharma1423/custom_odoo_image:v1
+    image: abhisharma1423/custom_odoo_image:
     depends_on:
       - db
     container_name: odoo_18
